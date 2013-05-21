@@ -10,26 +10,27 @@
 (def component-1
   {:type 'atomic
    :current "start"
-   :transitions [{:from "start" :to "end" :port "P"}
-                 {:from "start" :to "end" :port "S"}
-                 {:from "end" :to "start" :port "Q"}]})
+   :transitions [{:from "start" :to "end" :export "P"}
+                 {:from "start" :to "end" :export "S"}
+                 {:from "end" :to "start" :export "Q"}]})
 ;; A BIP component definition
 (def component-2
   {:type 'atomic
    :current "start"
-   :transitions [{:from "start" :to "end" :port "M"}
-                 {:from "end" :to "start" :port "N"}]})
+   :innter-transitions [{:from "start" :to "end" :inport "I"}]
+   :transitions [{:from "start" :to "end" :export "M"}
+                 {:from "end" :to "start" :export "N"}]})
 
 ;; A BIP interaction definiction
 (def interaction-1
   {:type 'interaction
-   :bind-ports [{:component (var component-1) :port "P"}
-                {:component (var component-2) :port "M"}]
+   :bind-ports [{:component (var component-1) :export "P"}
+                {:component (var component-2) :export "M"}]
    :export "T"})
 ;; A BIP interaction definiction
 (def interaction-2
   {:type 'interaction
-   :bind-ports [{:component (var component-1) :port "S"}]
+   :bind-ports [{:component (var component-1) :export "S"}]
    :export "ES"})
 
 ;; A BIP compound component definition
@@ -38,10 +39,10 @@
    :current "" ;; this key should not be used. why is it created?
    :sub-components [(var component-1) (var component-2)]
    :interactions [{:interaction (var interaction-1)}]
-   :bind-ports [{:component (var component-1) :source "Q" :port "Q"}
-                {:component (var component-1) :source "S" :port "S"}
-                {:component (var component-2) :source "N" :port "N"}
-                {:component (var interaction-1) :source "T" :port "T"}]
+   :bind-ports [{:component (var component-1) :source "Q" :export "Q"}
+                {:component (var component-1) :source "S" :export "S"}
+                {:component (var component-2) :source "N" :export "N"}
+                {:component (var interaction-1) :source "T" :export "T"}]
    })
 
 ;; list current enabled ports of a component
@@ -53,22 +54,22 @@
   [component]
   (cond (= 'atomic (component :type ))
     ;; ports of transitions whose source state is 'current' state
-    (map :port (filter
-                 #(= (% :from ) (component :current ))
-                 (component :transitions )))
+    (map :export (filter
+                   #(= (% :from ) (component :current ))
+                   (component :transitions )))
 
     (= 'compound (component :type ))
     ;; check exports connected to sub-components and connectors and list the enabled ones
-    (map :port (filter
-                 #(port-enable? (% :component ) (% :source ))
-                 (component :bind-ports )))
+    (map :export (filter
+                   #(export-enable? (% :component ) (% :source ))
+                   (component :bind-ports )))
     (= 'interaction (component :type ))
     ;; check if interaction is enabled and list its export
     (if (interaction-enable? component)
       [(component :export )]
       nil)))
 
-(possible-ports component-1)
+(possible-ports component-2)
 (possible-ports interaction-1)
 (possible-ports interaction-2)
 (= ["S" "T"] (possible-ports component-top))
@@ -79,10 +80,9 @@
 (defn component-enable?
   [component]
   (case (component :type )
-    atomic (+ 1)
+    atomic ()
     compound (+ 2)
     interaction (+ 3)))
-(= 'atomic 'compound)
 
 (component-enable? component-1)
 
@@ -97,15 +97,16 @@
   [seq elm]
   (if (some #(= elm %) seq) true false))
 
-;; check whether a port is enabled in a specific component
+;; check whether a export is enabled in a specific component
 ;; TODO: should consider interaction ports
 ;; return true or false
-(defn port-enable?
-  [component port]
-  (in? (possible-ports component) port))
+(defn export-enable?
+  [component export]
+  (in? (possible-ports component) export))
 
-(port-enable? component-1 "S")
-(port-enable? interaction-1 "T")
+(export-enable? component-1 "S")
+
+(export-enable? interaction-1 "T")
 
 
 
@@ -115,7 +116,7 @@
 (defn interaction-enable?
   [interaction]
   (reduce #(and %1 %2) true
-    (map (fn [item] (port-enable? (item :component ) (item :port )))
+    (map (fn [item] (export-enable? (item :component ) (item :export )))
       (interaction :bind-ports ))))
 
 
