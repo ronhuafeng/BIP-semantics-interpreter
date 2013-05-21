@@ -51,24 +51,22 @@
 ;;       a key of component structure.
 (defn possible-ports
   [component]
-  (cond (= 'atomic (component :type))
-          ;; ports of transitions whose source state is 'current' state
-        (map :port
-             (filter
-              #(= (% :from) (component :current))
-              (component :transitions)))
+  (cond (= 'atomic (component :type ))
+    ;; ports of transitions whose source state is 'current' state
+    (map :port (filter
+                 #(= (% :from ) (component :current ))
+                 (component :transitions )))
 
-        (= 'compound (component :type))
-        ;; check exports connected to sub-components and connectors and list the enabled ones
-        (map :port
-             (filter
-              #(port-enable? (% :component) (% :source))
-              (component :bind-ports)))
-        (= 'interaction (component :type))
-        ;; check if interaction is enabled and list its export
-        (if (interaction-enable? component)
-          [(component :export)]
-          nil)))
+    (= 'compound (component :type ))
+    ;; check exports connected to sub-components and connectors and list the enabled ones
+    (map :port (filter
+                 #(port-enable? (% :component ) (% :source ))
+                 (component :bind-ports )))
+    (= 'interaction (component :type ))
+    ;; check if interaction is enabled and list its export
+    (if (interaction-enable? component)
+      [(component :export )]
+      nil)))
 
 (possible-ports component-1)
 (possible-ports interaction-1)
@@ -78,7 +76,15 @@
 ;; TODO
 ;; a component has a enabled interaction (without export)
 ;; or a enabled component (not using its export)
-(defn component-enable? [] ())
+(defn component-enable?
+  [component]
+  (case (component :type )
+    atomic (+ 1)
+    compound (+ 2)
+    interaction (+ 3)))
+(= 'atomic 'compound)
+
+(component-enable? component-1)
 
 
 
@@ -109,8 +115,8 @@
 (defn interaction-enable?
   [interaction]
   (reduce #(and %1 %2) true
-          (map (fn [item] (port-enable? (item :component) (item :port)))
-               (interaction :bind-ports))))
+    (map (fn [item] (port-enable? (item :component ) (item :port )))
+      (interaction :bind-ports ))))
 
 
 (interaction-enable? interaction-1)
