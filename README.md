@@ -1,4 +1,4 @@
 BIP-semantics-interpretor
 =========================
 
-interprete BIP semantics in Clojure
+Interpret BIP semantics in Clojure

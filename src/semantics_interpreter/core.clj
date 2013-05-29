@@ -2,48 +2,53 @@
 ;; date: 2013-05-17
 ;; last-modified: 2013-05-18
 
-(ns semantics-interpreter.core)
+(ns semantics-interpreter.core
+  (:use clojure.test))
 
 
 
 ;; A BIP component definition
-(def component-1
-  {:type 'atomic
-   :current "start"
-   :transitions [{:from "start" :to "end" :export "P"}
-                 {:from "start" :to "end" :export "S"}
-                 {:from "end" :to "start" :export "Q"}]})
+(def component-1 (atom
+                  {:type 'atomic
+                   :current "start"
+                   :transitions [{:from "start" :to "end" :export "P"}
+                                 {:from "start" :to "end" :export "S"}
+                                 {:from "end" :to "start" :export "Q"}]}))
 ;; A BIP component definition
-(def component-2
-  {:type 'atomic
-   :current "start"
-   :innter-transitions [{:from "start" :to "end" :inport "I"}]
-   :transitions [{:from "start" :to "end" :export "M"}
-                 {:from "end" :to "start" :export "N"}]})
+(def component-2 (atom
+                  {:type 'atomic
+                   :current "start"
+                   :inner-transitions [{:from "start" :to "end" :inport "I"}]
+                   :transitions [{:from "start" :to "end" :export "M"}
+                                 {:from "end" :to "start" :export "N"}]}))
 
 ;; A BIP interaction definiction
-(def interaction-1
-  {:type 'interaction
-   :bind-ports [{:component (var component-1) :export "P"}
-                {:component (var component-2) :export "M"}]
-   :export "T"})
+(def interaction-1 (atom
+                    {:type 'interaction
+                     :bind-ports [{:component component-1 :export "P"}
+                                  {:component component-2 :export "M"}]
+                     :export "T"}))
 ;; A BIP interaction definiction
-(def interaction-2
-  {:type 'interaction
-   :bind-ports [{:component (var component-1) :export "S"}]
-   :export "ES"})
+(def interaction-2 (atom
+                    {:type 'interaction
+                     :bind-ports [{:component component-1 :export "S"}]
+                     :export "ES"}))
 
 ;; A BIP compound component definition
-(def component-top
-  {:type 'compound
-   :current "" ;; this key should not be used. why is it created?
-   :sub-components [(var component-1) (var component-2)]
-   :interactions [{:interaction (var interaction-1)}]
-   :bind-ports [{:component (var component-1) :source "Q" :export "Q"}
-                {:component (var component-1) :source "S" :export "S"}
-                {:component (var component-2) :source "N" :export "N"}
-                {:component (var interaction-1) :source "T" :export "T"}]
-   })
+(def component-top (atom
+                    {:type 'compound
+                     :current "" ;; this key should not be used. why is it created?
+                     :components [component-1 component-2 interaction-1]
+                     :bind-ports [{:component component-1 :source "Q" :export "Q"}
+                                  {:component component-1 :source "S" :export "S"}
+                                  {:component component-2 :source "N" :export "N"}
+                                  {:component interaction-1 :source "T" :export "T"}]
+                     }))
+
+(defn add-transition 
+  [component t]
+  (swap!))
+
 
 ;; list current enabled ports of a component
 ;; only works for atomic components
@@ -53,38 +58,50 @@
 (defn possible-ports
   [component]
   (cond (= 'atomic (component :type ))
-    ;; ports of transitions whose source state is 'current' state
-    (map :export (filter
-                   #(= (% :from ) (component :current ))
-                   (component :transitions )))
+        ;; ports of transitions whose source state is 'current' state
+        (map :export (filter
+                      #(= (% :from ) (component :current ))
+                      (component :transitions )))
 
-    (= 'compound (component :type ))
-    ;; check exports connected to sub-components and connectors and list the enabled ones
-    (map :export (filter
-                   #(export-enable? (% :component ) (% :source ))
-                   (component :bind-ports )))
-    (= 'interaction (component :type ))
-    ;; check if interaction is enabled and list its export
-    (if (interaction-enable? component)
-      [(component :export )]
-      nil)))
+        (= 'compound (component :type ))
+        ;; check exports connected to sub-components and connectors and list the enabled ones
+        (map :export (filter
+                      #(export-enable? (deref (% :component )) 
+                                       (% :source ))
+                      (component :bind-ports )))
+        (= 'interaction (component :type ))
+        ;; check if interaction is enabled and list its export
+        (if (interaction-enable? component)
+          [(component :export )]
+          nil)))
 
-(possible-ports component-2)
-(possible-ports interaction-1)
-(possible-ports interaction-2)
-(= ["S" "T"] (possible-ports component-top))
+(possible-ports @component-2)
+(possible-ports @interaction-1)
+(possible-ports @interaction-2)
+(= ["S" "T"] (possible-ports @component-top))
 
 ;; TODO
 ;; a component has a enabled interaction (without export)
 ;; or a enabled component (not using its export)
 (defn component-enable?
   [component]
-  (case (component :type )
-    atomic ()
-    compound (+ 2)
-    interaction (+ 3)))
+  (case (:type component)
+    atomic (in?
+            (map :from (:inner-transitions component))
+            (:current component))
+    ;; every sub-component of a compound component is enable
+    compound (reduce #(or %1 %2) false
+                     (map (comp component-enable? deref)
+                          (:components component)))
+    interaction (if (not= nil (:export component))
+                  false
+                  (interaction-enable? component))))
 
-(component-enable? component-1)
+(component-enable? @component-2)
+(component-enable? @component-1)
+(component-enable? @interaction-1)
+(component-enable? @component-top)
+(:type @component-1)
 
 
 
@@ -104,10 +121,11 @@
   [component export]
   (in? (possible-ports component) export))
 
-(export-enable? component-1 "S")
+(export-enable? @component-1 "S")
 
-(export-enable? interaction-1 "T")
-
+(export-enable? @interaction-1 "T")
+(deftest test-export-enable?
+  (is (= true (export-enable? @component-1 "S"))))
 
 
 
@@ -116,15 +134,14 @@
 (defn interaction-enable?
   [interaction]
   (reduce #(and %1 %2) true
-    (map (fn [item] (export-enable? (item :component ) (item :export )))
-      (interaction :bind-ports ))))
+          (map (fn [item] (export-enable? (deref (item :component )) (item :export )))
+               (interaction :bind-ports ))))
 
 
-(interaction-enable? interaction-1)
-(interaction-enable? interaction-2)
+(interaction-enable? @interaction-1)
+(interaction-enable? @interaction-2)
 
 ;; compute a possible next state of a top component
 (defn bip-next-snapshot
   [component]
   component)
-
