@@ -5,7 +5,9 @@
 (ns semantics-interpreter.core
   (:use clojure.test))
 
-
+(defn -main
+  [& args]
+  (println "hello\n"))
 
 ;; A BIP component definition
 (def component-1 (atom
