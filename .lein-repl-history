@@ -1,0 +1,17 @@
+(require 'semantics-interpreter.core
+)
+(require 'semantics-interpreter.core)
+comomponent-1
+component-1
+semantics-interpeter.core/component-1
+(semantics-interpreter.core/export-enable?)
+(refer 'semantics-interpreter.core)
+(source semantics-interpreter.core)
+(source semantics_interpreter.core)
+(source semantics-interpreter.core)
+(doc reduce )
+(require 'semantics-interpreter)
+(require 'semantics-interpreter.core)
+(source semantics-interpreter.core/export-enable?)
+(source semantics-interpreter.core/-main)
+(source semantics-interpreter.core/component-top)
