@@ -1,27 +1,25 @@
-3(ns semantics-interpreter.data-structure)
+(ns semantics-interpreter.data-structure)
 
-;; TODO: type and name field may be defined as meta information
+(defrecord Place
+  [type, ^String name])
 
-(defrecord Place 
-    [type, ^String name])
+(defrecord Port
+  [type, ^String name, ^boolean export?])
 
-(defrecord Port 
-    [type, ^String name, ^boolean export?])
-
-(defrecord Transition 
-    [type, ^String name, ^Place from, ^Place to, ^Port port])
+(defrecord Transition
+  [type, ^String name, ^Place from, ^Place to, ^Port port])
 
 (defrecord AtomicComponent
-    [type, ^String name, ^Place current, transitions])
+  [type, ^String name, ^Place current, transitions])
 
-(defrecord PortBinding 
-    [type, ^String name, source-component, ^Port source, ^Port target ])
+(defrecord PortBinding
+  [type, ^String name, source-component, ^Port source, ^Port target])
 
 (defrecord Interaction
-    [type, ^String name, port-bingdings, ^Port port])
+  [type, ^String name, port-bindings, ^Port port])
 
 (defrecord CompoundComponent
-    [type, ^String name, components, port-bindings])
+  [type, ^String name, components, port-bindings])
 
 (defn create-place
   [^String name]
@@ -69,3 +67,14 @@
 (defmethod get-current 'atomic
   [component]
   (deref (:current component)))
+
+(defmulti set-current
+  "Get the current place which represents the atomic component's state."
+  (fn [component place] (:type component)))
+
+(defmethod set-current 'atomic
+  [component place]
+  (compare-and-set! (:current component)
+    (get-current component)
+    place))
+
