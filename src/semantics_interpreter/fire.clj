@@ -4,69 +4,98 @@
   (:use semantics-interpreter.dataset)
   (:use semantics-interpreter.firing-selection))
 
-(defmulti fire-a-component-via-export
+(defn select-a-enabled-component
+  "Select a component from a list of enabled components,
+   the one with earliest time has the highest priority."
+  [enabled-components]
+  {:pre [(pos? (count enabled-components))
+         "Empty list of enabled components is not allowed!"]}
+  (let [tmin (apply min-time
+               (map get-time
+                 enabled-components))]
+    (rand-nth (filter #(= tmin (get-time %))
+                enabled-components))))
+
+
+(defmulti fire-inner-component
   "Fire a component via its 'export'port.
    Return type: boolean"
-  (fn [component port] (:type component)))
+  (fn [component port time-tag]
+    (:type component)))
 
-(defmethod fire-a-component-via-export 'atomic
-  [component port]
-  (let [t (first (reveal-components-via-port component port))]
-    (set-current component (:to t))))
+(defmethod fire-inner-component 'atomic
+  [component port time-tag]
+  (let [t (first (inner-components component port))]
+    (and (set-current component
+           (:to t))
+      (set-time component
+        (:time-gap t)))))
 
-(defmethod fire-a-component-via-export 'compound
+(defmethod fire-inner-component 'compound
   #_ ("Fire the component connected to the port.")
-  [component port]
+  [component port time-tag]
   (let [t (first
-            (reveal-components-via-port component
+            (inner-components component
               port))]
-    (apply fire-a-component-via-export t)))
+    (apply fire-inner-component
+      (into t [time-tag]))))
 
-(defmethod fire-a-component-via-export 'interaction
+(defmethod fire-inner-component 'interaction
   #_ ("Fire every component connected to this interaction
       via their corresponding port.")
-  [component port]
+  [component port time-tag]
   (let [tl
-        (reveal-components-via-port component
-          port)]
+        (inner-components component port)]
     (reduce #(and %1 %2)
       true
-      (map (partial apply fire-a-component-via-export)
+      (map #(apply fire-inner-component
+              (into %
+                [(+ time-tag
+                   (:time-gap component))]))
         tl))))
 
-(defmulti fire-a-component
+(defmulti fire-component
   "Fire a component and set it to a new state.
    Return type: boolean"
-  (fn [component] (:type component)))
+  (fn [component]
+    (:type component)))
 
-(defmethod fire-a-component 'atomic
+(defmethod fire-component 'atomic
   [component]
   #_ ("select a transition to fire.")
-  (let [t (select-a-enabled-component
-            (filter
-              (fn [t]
-                (and (attrs-equal? (get-current component)
-                       (:from t)
-                       :name )
-                  (= false (:export? (:port t)))))
-              (:transitions component)))]
-    (if (not-empty t)
+  (let [tl (filter
+             (fn [t]
+               (and (attrs-equal? (get-current component)
+                      (:from t)
+                      :name )
+                 (= false (:export? (:port t)))))
+             (:transitions component))]
+    (if (not-empty tl)
       #_ ("if new state set successfully, the function return true.")
-      (set-current component (:to t))
+      (let [t (rand-nth tl)]
+        (and (set-current component
+               (:to t))
+          (set-time component
+            (+ (get-time component)
+              (:time-gap t)))))
       false)))
-(defmethod fire-a-component 'compound
+(defmethod fire-component 'compound
   [component]
-  (fire-a-component
-    (select-a-enabled-component
-      (filter component-enable? (:components component)))))
+  (let [sub-component
+        (select-a-enabled-component
+          (filter component-enable? (:components component)))]
+    (fire-component sub-component)))
 
-(defmethod fire-a-component 'interaction
+(defmethod fire-component 'interaction
   [component]
-  (reduce
-    #(and %1 %2)
-    true
-    (map (fn [t]
-           (fire-a-component-via-export
-             (:source-component t)
-             (:source t)))
-      (:port-bindings component))))
+  (let [tl (:port-bindings component)
+        time-tag (get-time component)]
+    (reduce
+      #(and %1 %2)
+      true
+      (map (fn [t]
+             (fire-inner-component
+               (:source-component t)
+               (:source t)
+               time-tag))
+        tl))))

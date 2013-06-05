@@ -17,7 +17,7 @@
   (println "\n\n\n")
   (println (:name (get-current component-1)))
   (println (:name (get-current component-2)))
-  (fire-a-component component-top)
+  (fire-component component-top)
   (println (:name (get-current component-1)))
   (println (:name (get-current component-2))))
 

@@ -5,70 +5,55 @@
 (defrecord Port
   [type, ^String name, ^boolean export?])
 (defrecord Transition
-  [type, ^String name, ^Place from, ^Place to, ^Port port])
+  [type, ^String name, ^Place from, ^Place to, ^Port port, time-gap])
 (defrecord AtomicComponent
-  [type, ^String name, ^Place current, transitions])
+  [type, ^String name, ^Place current, transitions, time-tag])
 (defrecord PortBinding
   [type, ^String name, source-component, ^Port source, ^Port target])
 (defrecord Interaction
-  [type, ^String name, port-bindings, ^Port port])
+  [type, ^String name, port-bindings, ^Port port, time-gap])
 (defrecord CompoundComponent
-  [type, ^String name, components, port-bindings])
-
+  [type, ^String name, components, port-bindings, time-tag])
 
 (defn create-place
   [^String name]
   (->Place 'place name))
+
 (defn create-port
   [^String name export?]
   (->Port 'port name export?))
+
 (defn create-transition
-  [^Place from ^Place to ^Port port]
-  (->Transition 'transition "" from to port))
+  [^Place from ^Place to ^Port port time-gap]
+  (->Transition 'transition "" from to port time-gap))
+
 (defn create-transitions
   [& t-list]
   (apply list t-list))
+
 (defn create-atom
-  [^String name ^Place current transitions]
-  (->AtomicComponent
-    'atomic name
-    (atom current)
-    transitions))
+  [^String name ^Place current transitions time-tag]
+  (->AtomicComponent 'atomic name (atom current) transitions (atom time-tag)))
 
 (defn create-port-binding
   [component ^Port source ^Port target]
   (->PortBinding 'port-binding "" component source target))
+
 (defn create-port-bindings
   [& b-list]
   (apply list b-list))
 
 (defn create-interaction
-  [^String name port-bindings ^Port port]
-  (->Interaction 'interaction name port-bindings port))
+  [^String name port-bindings ^Port port time-gap]
+  (->Interaction 'interaction name port-bindings port time-gap))
 
 (defn create-components
   [& c-list]
   (apply list c-list))
 
 (defn create-compound
-  [^String name components port-bindings]
-  (->CompoundComponent 'compound name components port-bindings))
+  [^String name components port-bindings time-tag]
+  (->CompoundComponent 'compound name components port-bindings (atom time-tag)))
 
-(defmulti get-current
-  "Get the current place which represents the atomic component's state."
-  (fn [component] (:type component)))
 
-(defmethod get-current 'atomic
-  [component]
-  (deref (:current component)))
-
-(defmulti set-current
-  "Get the current place which represents the atomic component's state."
-  (fn [component place] (:type component)))
-
-(defmethod set-current 'atomic
-  [component place]
-  (compare-and-set! (:current component)
-    (get-current component)
-    place))
 

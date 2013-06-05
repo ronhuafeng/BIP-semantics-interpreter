@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/semantics_interpreter/data_structure_test.clj" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/semantics_interpreter/dataset_test.clj" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/semantics_interpreter/fire_test.clj" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/semantics_interpreter/firing_selection_test.clj" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/test/semantics_interpreter/state_queries_test.clj" />
-      <change type="DELETED" beforePath="G:\Tsmart Projects\BIP-semantics\Instarepl.clj" afterPath="" />
-      <change type="DELETED" beforePath="G:\Tsmart Projects\BIP-semantics\src\semantics_interpreter\white-board.clj" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/test/semantics_interpreter/core_test.clj" afterPath="$PROJECT_DIR$/test/semantics_interpreter/core_test.clj" />
+    <list default="true" id="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" name="Default" comment="add some test files">
+      <change type="DELETED" beforePath="G:\Tsmart Projects\BIP-semantics\target\stale\dependencies" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/semantics_interpreter/core.clj" afterPath="$PROJECT_DIR$/src/semantics_interpreter/core.clj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/semantics_interpreter/data_structure.clj" afterPath="$PROJECT_DIR$/src/semantics_interpreter/data_structure.clj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/semantics_interpreter/dataset.clj" afterPath="$PROJECT_DIR$/src/semantics_interpreter/dataset.clj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/semantics_interpreter/fire.clj" afterPath="$PROJECT_DIR$/src/semantics_interpreter/fire.clj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/semantics_interpreter/firing_selection.clj" afterPath="$PROJECT_DIR$/src/semantics_interpreter/firing_selection.clj" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/semantics_interpreter/state_queries.clj" afterPath="$PROJECT_DIR$/src/semantics_interpreter/state_queries.clj" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="project.clj.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370231744484" ignored="false" />
+    <file path="/Dummy.txt" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370442281090" ignored="false" />
     <file path="/Clojure REPL" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370230560334" ignored="false" />
     <file path="/core.clj" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370157312737" ignored="false" />
     <file path="/firing_selection.clj" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370138525240" ignored="false" />
     <file path="/firing.clj" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370138403855" ignored="false" />
-    <file path="/data_structure.clj" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370231056686" ignored="false" />
+    <file path="/data_structure.clj" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370266308337" ignored="false" />
+    <file path="/dataset.clj" changelist="59fa5f73-b2e8-472a-b14b-71d3249e3f9e" time="1370266343041" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -90,61 +89,62 @@
     <favorites_list name="project.clj" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.51782364">
-      <split-first>
-        <leaf>
-          <file leaf-file-name="core.clj" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/core.clj">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="15" column="26" selection-start="382" selection-end="382" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="data_structure.clj" pinned="false" current="true" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/data_structure.clj">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="5" column="25" selection-start="125" selection-end="125" vertical-scroll-proportion="0.12082854">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="dataset.clj" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/dataset.clj">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="fire.clj" pinned="false" current="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/fire.clj">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf>
-          <file leaf-file-name="core_test.clj" pinned="false" current="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/test/semantics_interpreter/core_test.clj">
-              <provider selected="true" editor-type-id="text-editor">
-                <state line="6" column="18" selection-start="195" selection-end="195" vertical-scroll-proportion="0.14499424">
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file leaf-file-name="core.clj" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/core.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="10" column="44" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="data_structure.clj" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/data_structure.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="57" column="111" selection-start="1653" selection-end="1653" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="dataset.clj" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/dataset.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="53" column="13" selection-start="2012" selection-end="2012" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="state_queries.clj" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/state_queries.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="304" column="0" selection-start="9022" selection-end="9022" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="firing_selection.clj" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/firing_selection.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="0" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="fire.clj" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/fire.clj">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="17" column="0" selection-start="667" selection-end="667" vertical-scroll-proportion="0.41081703">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindManager">
     <FindUsagesManager>
@@ -153,6 +153,11 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
   </component>
   <component name="GitLogSettings">
     <option name="myStructureFilterPaths" />
@@ -163,13 +168,15 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/semantics_interpreter/dataset.clj" />
         <option value="$PROJECT_DIR$/src/semantics_interpreter/firing.clj" />
-        <option value="$PROJECT_DIR$/src/semantics_interpreter/firing_selection.clj" />
         <option value="$PROJECT_DIR$/src/semantics_interpreter/core.clj" />
         <option value="$PROJECT_DIR$/test/semantics_interpreter/core_test.clj" />
         <option value="$PROJECT_DIR$/nrepl-history" />
         <option value="$PROJECT_DIR$/src/semantics_interpreter/data_structure.clj" />
+        <option value="$PROJECT_DIR$/src/semantics_interpreter/dataset.clj" />
+        <option value="$PROJECT_DIR$/src/semantics_interpreter/state_queries.clj" />
+        <option value="$PROJECT_DIR$/src/semantics_interpreter/firing_selection.clj" />
+        <option value="$PROJECT_DIR$/src/semantics_interpreter/fire.clj" />
       </list>
     </option>
   </component>
@@ -210,7 +217,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -242,36 +248,8 @@
               <option name="myItemId" value="test" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-          </PATH>
-          <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="project.clj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BIP-semantics" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="target" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="project.clj" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="BIP-semantics" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="target" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="stale" />
+              <option name="myItemId" value="semantics_interpreter" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -296,6 +274,7 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -484,7 +463,11 @@
       <created>1370157946183</created>
       <updated>1370157946183</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="add some test files">
+      <created>1370231992095</created>
+      <updated>1370231992095</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -511,30 +494,30 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
-      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3265306" sideWeight="0.4996633" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32550335" sideWeight="0.4996633" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="JetGradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Leiningen" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.23504274" sideWeight="0.7393736" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Leiningen" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2830061" sideWeight="0.82997763" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3277311" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32885906" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.4996633" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298969" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.14583333" sideWeight="0.7393736" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2606264" sideWeight="0.5003367" order="2" side_tool="true" content_ui="tabs" x="-6" y="624" width="1872" height="271" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.17521368" sideWeight="0.6711052" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.17002237" sideWeight="0.5003367" order="2" side_tool="true" content_ui="tabs" x="-296" y="1162" width="1872" height="669" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963988" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="CDI" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963988" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3288948" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32756326" sideWeight="0.4996633" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32975295" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -582,7 +565,7 @@
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="false" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" value="clear a 'todo' memo." />
+    <option name="LAST_COMMIT_MESSAGE" value="add some test files" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -599,6 +582,7 @@
     <MESSAGE value="change some functions&#10;&#10;use 'case' to select from different components" />
     <MESSAGE value="complete basic functions&#10;&#10;1.fire a component&#10;2.fire a component via a port" />
     <MESSAGE value="clear a 'todo' memo." />
+    <MESSAGE value="add some test files" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -648,18 +632,6 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/target/stale/dependencies">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/test/semantics_interpreter/data_structure_test.clj">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -667,35 +639,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/test/semantics_interpreter/core_test.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="6" column="18" selection-start="195" selection-end="195" vertical-scroll-proportion="0.14499424">
-          <folding />
-        </state>
+        <state line="6" column="18" selection-start="195" selection-end="195" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/core.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="26" selection-start="382" selection-end="382" vertical-scroll-proportion="0.0">
+        <state line="10" column="44" selection-start="292" selection-end="292" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/dataset.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/fire.clj">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="53" column="13" selection-start="2012" selection-end="2012" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/data_structure.clj">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="25" selection-start="125" selection-end="125" vertical-scroll-proportion="0.12082854">
+        <state line="57" column="111" selection-start="1653" selection-end="1653" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/state_queries.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="304" column="0" selection-start="9022" selection-end="9022" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/firing_selection.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="0" selection-start="137" selection-end="137" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/semantics_interpreter/fire.clj">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="0" selection-start="667" selection-end="667" vertical-scroll-proportion="0.41081703">
           <folding />
         </state>
       </provider>
