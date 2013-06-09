@@ -1,0 +1,57 @@
+(ns semantics-interpreter.structures.Port-test
+  (use semantics-interpreter.protocols.Fireable)
+  (use semantics-interpreter.protocols.Queryable)
+  (use semantics-interpreter.protocols.Accessible)
+  (:require [clojure.test :refer :all ]
+            [semantics-interpreter.structures.Port :refer :all ]))
+
+(deftest export?-test
+  (testing "export? of Port"
+    (is (= true (export? (create-port "P" true))))
+    (is (= false (export? (create-port "Q" false))))))
+
+(deftest add-value-test
+  (testing "add-value of Port"
+    (is (let [p (create-port "P" false)]
+          (do
+            (add-value! p {:x 1})
+            (= [{:x 1}]
+               (retrieve-port p)))))
+     (is (let [p (create-port "P" false)]
+          (do
+            (add-value! p {:x 1})
+            (= [{:x 1}]
+               (retrieve-port p)))))))
+
+(deftest retrieve-port-test
+  (testing "retrieve-port-test of Port"
+    (is (let [p (create-port "P" false)]
+          (do
+            (add-value! p {:x 1})
+            (= [{:x 1}]
+               (retrieve-port p)))))))
+
+(deftest clear!-test
+  (testing "clear! of Port"
+    (is (let [p (create-port "P" false)]
+          (do
+            (add-value! p {:x 1})
+            (clear! p)
+            (= []
+               (retrieve-port p)))))))
+
+(deftest equal?-test
+  (testing "equal? of Port"
+    (is (= true (equal? (create-port "P" false)
+                        (create-port "P" false))))
+    (is (= false (equal? (create-port "P" false)
+                         (create-port "Q" false))))))
+
+(deftest enable?-test
+  (testing "enable? of Port"
+    (is (= true (let [p (create-port "P" false)]
+                  (do
+                    (add-value! p {:x 1})
+                    (enable? p)))))
+    (is (= false (enable?
+                  (create-port "P" false))))))
