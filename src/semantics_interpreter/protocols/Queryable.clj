@@ -1,3 +1,9 @@
-(ns semantics-interpreter.protocols.query)
+(ns semantics-interpreter.protocols.Queryable)
 
-(defprotocol )
+(defprotocol Queryable
+  (enable?
+    [this] [this port])
+  (equal? 
+    [this that])
+  (export?
+    [this]))

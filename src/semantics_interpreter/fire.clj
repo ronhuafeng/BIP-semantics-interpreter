@@ -1,8 +1,7 @@
 (ns semantics-interpreter.fire
   (:use semantics-interpreter.data-structure)
   (:use semantics-interpreter.state-queries)
-  (:use semantics-interpreter.dataset)
-  (:use semantics-interpreter.firing-selection))
+  (:use semantics-interpreter.dataset))
 
 (defn select-a-enabled-component
   "Select a component from a list of enabled components,

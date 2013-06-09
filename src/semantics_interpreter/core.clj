@@ -3,7 +3,6 @@
 ;; last-modified: 2013-05-18
 
 (ns semantics-interpreter.core
-  (:use clojure.test)
   (:use semantics-interpreter.dataset)
   (:use semantics-interpreter.state-queries)
   (:use semantics-interpreter.data-structure)
