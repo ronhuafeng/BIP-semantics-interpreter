@@ -13,4 +13,6 @@
   (enable!
     [this])
   (current-place
-    [atomic]))
+    [atomic])
+  (top-priority
+    [this rules selections]))

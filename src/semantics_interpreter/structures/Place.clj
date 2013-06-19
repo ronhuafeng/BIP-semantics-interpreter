@@ -4,7 +4,7 @@
   (use semantics-interpreter.protocols.Accessible))
 
 (defrecord Place
-    [type name active?])
+  [type name active?])
 
 (defn create-place
   [name]
@@ -12,22 +12,23 @@
 
 (extend-type Place
   Queryable
-  (equal? [this that]
+  (equal-name?
+    [this that]
     (and (= 'Place
-            (:type this)
-            (:type that))
-         (= (:name this)
-            (:name that))))
+           (:type this)
+           (:type that))
+      (= (:name this)
+        (:name that))))
   (enable? [this]
     (deref (:active? this)))
-  
+
   Accessible
   (clear! [this]
     (compare-and-set! (:active? this)
-                      (deref (:active? this))
-                      false))
+      (deref (:active? this))
+      false))
   (enable! [this]
     (compare-and-set! (:active? this)
-                      (deref (:active? this))
-                      true)))
-  
+      (deref (:active? this))
+      true)))
+

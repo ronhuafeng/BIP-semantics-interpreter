@@ -3,15 +3,18 @@
   (use semantics-interpreter.protocols.Queryable)
   (use semantics-interpreter.protocols.Accessible)
   (:require [clojure.test :refer :all ]
-            [semantics-interpreter.structures.Place :refer :all ]))
+   [semantics-interpreter.structures.Place :refer :all ]))
 
 
-(deftest equal?-test
+(deftest equal-name?-test
   (testing "equal? of Place"
-    (is (equal? (create-place "start")
-                (create-place "start")))
-    (is (equal? (create-place "end")
-                (create-place "end")))))
+    (is (equal-name? (create-place "start")
+          (create-place "start")))
+    (is (equal-name? (create-place "end")
+          (create-place "end")))
+    (is (= false (equal-name?
+                   (create-place "start")
+                   (create-place "end"))))))
 
 (deftest enable?-test
   (testing "enable? of Place"
@@ -37,6 +40,6 @@
 (deftest enable!-test
   (testing "enable! of Place"
     (is (let [p (create-place "start")]
-          (do 
+          (do
             (enable! p)
             (= true (enable? p)))))))

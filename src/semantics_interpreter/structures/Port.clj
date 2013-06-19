@@ -3,7 +3,7 @@
   (use semantics-interpreter.protocols.Accessible))
 
 (defrecord Port
-    [type name export? values])
+  [type name export? values])
 
 (defn create-port
   [name export?]
@@ -17,8 +17,8 @@
   (add-value!
     [port value]
     (swap! (:values port)
-           conj
-           value))
+      conj
+      value))
 
   (retrieve-port
     [this]
@@ -27,8 +27,8 @@
   (clear!
     [this]
     (compare-and-set! (:values this)
-                      (retrieve-port this)
-                      []))
+      (retrieve-port this)
+      []))
 
   Queryable
 
@@ -37,16 +37,16 @@
     (:export? port))
 
 
-  (equal?
+  (equal-name?
     [this that]
-    (and (= 'Port 
-            (:type this)
-            (:type that))
-         (= (:name this)
-            (:name that))))
+    (and (= 'Port
+           (:type this)
+           (:type that))
+      (= (:name this)
+        (:name that))))
   (enable?
     ([this]
-       (> (count (retrieve-port this))
-          0))))
+     (> (count (retrieve-port this))
+       0))))
 
 

@@ -2,11 +2,18 @@
   (use semantics-interpreter.protocols.Queryable))
 
 (defrecord Transition
-    [type name source target label])
+  [type name source target port])
 
 (defn create-transition
-  [name source target label]
-  (->Transition 'Transition name source target label))
+  [name source target port]
+  (->Transition 'Transition name source target port))
 
+(extend-type Transition
+  Queryable
 
+  (enable? [this place port]
+    (and
+      (equal-name? place (:source this))
+      (equal-name? port (:port this))))
+  )
 

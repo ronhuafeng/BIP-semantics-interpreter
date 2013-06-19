@@ -2,8 +2,10 @@
 
 (defprotocol Queryable
   (enable?
-    [this] [this port])
-  (equal? 
+    [this] [this port] [this place port])
+  (equal-name?
     [this that])
   (export?
-    [this]))
+    [this])
+  (contain-port?
+    [this port]))
