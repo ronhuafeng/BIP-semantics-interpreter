@@ -21,7 +21,7 @@
                             ports
                             places
                             transitions
-                            time)]
+                            (atom time))]
     (do
       (doseq [s (:places c)]
         (clear! s))
@@ -29,7 +29,7 @@
       (enable! init)
 
       (doseq [t (current-transitions c)]
-        (add-value! (:port t) {:ePort '()})))
+        (add-value! (:port t) {:time (get-time c)})))
     c))
 
 (defn enabled-internal-transitions
@@ -55,12 +55,17 @@
 
     (clear! (:source t))
     ;;TODO: some transition stuff
-    ;;TODO: some time stuff
+    ;;some time stuff
+    (set-time
+      component
+      (+
+        (:time t)
+        (get-time component)))
 
     (enable! (:target t))
 
     (doseq [t (current-transitions component)]
-      (add-value! (:port t) {:ePort '()}))))
+      (add-value! (:port t) {:time (get-time component)}))))
 
 (extend-type Atomic
   Queryable
@@ -92,6 +97,19 @@
       (fire-transition this t)))
 
   Accessible
+  (get-time
+    ([this]
+     (deref (:time this)))
+    ([this port]
+     (get-time this)))
+  (set-time
+    ([this new-value]
+     (compare-and-set!
+       (:time this)
+       (get-time this)
+       new-value))
+    ([this port new-value]
+     (set-time this new-value)))
   (current-place
     [this]
     (first
@@ -110,11 +128,14 @@
   (assign-port!
     [this port token]
     (let [current (current-place this)
-          t (first
-              (filter
-                #(enable? % current port)
-                (:transitions this)))]
+          t (some
+              #(if (enable? % current port) %)
+              (:transitions this))]
       (do
-        ;;TODO: set component's time"
+        ;;set component's time"
+        (if (nil? (:time token))
+          ()
+          (set-time this (:time token)))
+
         (fire-transition this t)))))
 

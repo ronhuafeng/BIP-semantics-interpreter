@@ -29,7 +29,9 @@
     (assign-port!
       (:component c)
       (:port c)
-      token)))
+      (assoc token :time (+
+                           (:time token)
+                           (:time t))))))
 
 (extend-type Interaction
 
@@ -51,10 +53,16 @@
 
   Accessible
 
+  (get-time
+    [this]
+    (apply max
+      (map #(get-time (:component %) (:port %))
+        (:connections this))))
+
   (retrieve-port
     [this port]
     (if (all-enable? (:connections this))
-      [{:ePort '()}]
+      [{:time (get-time this)}]
       []))
   (assign-port!
     [this port token]
@@ -64,7 +72,7 @@
 
   (fire!
     [this]
-    (fire-interaction! this {:msg "hello"}))
+    (fire-interaction! this {:time (get-time this)}))
   )
 
 

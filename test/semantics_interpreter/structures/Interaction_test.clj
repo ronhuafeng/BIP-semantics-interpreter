@@ -50,7 +50,7 @@
            nil
            [{:component C1 :port E1}
             {:component C2 :port R1}]
-           0)]
+           1)]
   ())
 
 (deftest all-in-one-test
@@ -96,34 +96,40 @@
              nil
              [{:component C1 :port E1}
               {:component C2 :port R1}]
-             0)
+             1)
         G2 (create-interaction
              "G2"
              PG
              [{:component C1 :port E1}
               {:component C2 :port R1}]
-             0)]
+             1)]
     (testing "all-in-one testing of Interaction"
       (is (enable? C1 E1))
       (is (enable? C2 R1))
       (is (enable? G1))
       (is (enable? G2 PG))
-      (is (= [{:ePort '()}] (retrieve-port G2 PG)))
+      (is (not= [] (retrieve-port G2 PG)))
       (do
-        (assign-port! C1 E1 {:msg "hello"})
+        (assign-port! C1 E1 {:time 1})
+        (is (= 1 (get-time C1)))
         (is (enable? C1))
         (fire! C1)
         (is (enable? C1))
-        (is (enable? C1 E1)))
+        (is (enable? C1 E1))
+        (set-time C1 0))
       (do
-        (assign-port! C2 R1 {:msg "hello"})
+        (assign-port! C2 R1 {:time 2})
         (is (enable? C2))
         (fire! C2)
-        (is (enable? C2 R1)))
+        (is (enable? C2 R1))
+        (is (= 2 (get-time C2)))
+        (set-time C2 0))
       (do
         (fire! G1)
         (is (enable? C1))
-        (is (enable? C2)))
+        (is (enable? C2))
+        (is (= 1 (get-time C1)))
+        (is (= 1 (get-time C2))))
       (do
         (fire! C1)
         (fire! C2)
@@ -131,12 +137,14 @@
         (is (enable? G2 PG)))
 
       (do
-        (assign-port! G2 PG {:msg "hello"})
+        (assign-port! G2 PG {:time 0})
         (is (enable? C1))
-        (is (enable? C2)))
+        (is (enable? C2))
+        (is (= 1 (get-time C1)))
+        (is (= 1 (get-time C2))))
       (do
         (fire! C1)
         (fire! C2)
         (is (enable? G1))
         (is (enable? G2 PG)))
-      (is (= [{:ePort '()}] (retrieve-port G2 PG))))))
+      (is (not= [] (retrieve-port G2 PG))))))

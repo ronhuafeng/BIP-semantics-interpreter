@@ -15,4 +15,10 @@
   (current-place
     [atomic])
   (top-priority
-    [this rules selections]))
+    [this rules selections])
+  (get-time
+    [this]
+    [this port])
+  (set-time
+    [this new-value]
+    [this port new-value]))

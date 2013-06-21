@@ -13,9 +13,9 @@
       I1 (create-port "I1" false)
       I2 (create-port "I2" false)
       E1 (create-port "E1" true)
-      t1 (create-transition "t1" start end I1)
-      t2 (create-transition "t2" start end E1)
-      t3 (create-transition "t3" end start I2)
+      t1 (create-transition "t1" start end I1 0)
+      t2 (create-transition "t2" start end E1 1)
+      t3 (create-transition "t3" end start I2 0)
       C1 (create-atomic
            "C1"
            [I1 I2 E1]
@@ -32,9 +32,9 @@
         I2 (create-port "I2" false)
         E1 (create-port "E1" true)
         E2 (create-port "E2" true)
-        t1 (create-transition "t1" start end I1)
-        t2 (create-transition "t2" start end E1)
-        t3 (create-transition "t3" end start I2)
+        t1 (create-transition "t1" start end I1 0)
+        t2 (create-transition "t2" start end E1 1)
+        t3 (create-transition "t3" end start I2 0)
         C1 (create-atomic
              "C1"
              [I1 I2 E1]
@@ -43,17 +43,21 @@
              [t1 t2 t3]
              0)]
     (testing "all-in-one test of atomic component"
+      (do
+        (is (= 0 (get-time C1)))
+        (set-time C1 2)
+        (is (= 2 (get-time C1)))
+        (set-time C1 0)
+        (is (= 0 (get-time C1))))
+
       (is (= start (current-place C1)))
       (is (not= end (current-place C1)))
       (is (= (set [t1 t2]) (set (current-transitions C1))))
       (is (= (set [E1 I1]) (set (map :port (current-transitions C1)))))
-      #_ (is (do
-               (doseq [p [I1 E1]]
-                 (add-value! p {:ePort '()}))
-               (= [{:ePort '()}] (retrieve-port E1))))
-      (is (= [{:ePort '()}] (retrieve-port C1 E1)))
+
+      (is (not= [] (retrieve-port C1 E1)))
       (is (= [] (retrieve-port I2)))
-      (is (= [{:ePort '()}] (retrieve-port E1)))
+      (is (not= [] (retrieve-port E1)))
       (is (= [] (retrieve-port C1 E2)))
       (is (= true (enable? C1)))
       (is (= true (enable? C1 E1)))
@@ -75,7 +79,15 @@
         (is (not= true (contain-port? C1 E2)))
         (is (= start (current-place C1)))
         (is (not= end (current-place C1)))
-        (is (= [{:ePort '()}] (retrieve-port C1 E1)))
+        (is (not= [] (retrieve-port C1 E1)))
         (is (= [] (retrieve-port I2)))
-        (is (= [{:ePort '()}] (retrieve-port E1)))
-        (is (= [] (retrieve-port C1 E2)))))))
+        (is (not= [] (retrieve-port E1)))
+        (is (= [] (retrieve-port C1 E2)))
+
+        (do
+          (assign-port! C1 E1 {:time 0})
+          (is (= 1 (get-time C1)))
+
+          (fire! C1)
+          (assign-port! C1 E1 {:time 2})
+          (is (= 3 (get-time C1))))))))
