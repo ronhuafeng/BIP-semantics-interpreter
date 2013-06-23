@@ -12,8 +12,6 @@
     [this])
   (enable!
     [this])
-  (current-place
-    [atomic])
   (top-priority
     [this rules selections])
   (get-time
@@ -21,4 +19,14 @@
     [this port])
   (set-time
     [this new-value]
-    [this port new-value]))
+    [this port new-value])
+
+  (get-variable
+    [this attr]
+    [this port attr])
+  (set-variable
+    [this attr new-value]
+    [this port attr new-value])
+
+  (project-value
+    [port component]))

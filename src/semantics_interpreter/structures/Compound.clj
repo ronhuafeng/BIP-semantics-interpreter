@@ -24,7 +24,7 @@
     #(enable? %)
     (:subcomponents compound)))
 
-(defn- get-export
+(defn get-export
   [compound port]
   (some
     #(if (= port (:target %)) %)
@@ -68,12 +68,12 @@
            (:subcomponents this)))))
     ([this port]
      (let [e (get-export this port)]
-       (get-time (:component e) (:source e)))))
+       (get-time (:source-component e) (:source e)))))
 
   (set-time
     ([this port new-value]
      (let [e (get-export this port)]
-       (set-time (:component e) (:source e)))))
+       (set-time (:source-component e) (:source e)))))
 
   (top-priority
     [this rules selections]

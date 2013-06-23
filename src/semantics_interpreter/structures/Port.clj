@@ -3,16 +3,26 @@
   (use semantics-interpreter.protocols.Accessible))
 
 (defrecord Port
-  [type name export? values])
+  [type name export? var-list values])
 
 (defn create-port
-  [name export?]
-  (->Port 'Port name export? (atom [])))
+  ([name export?]
+   (->Port 'Port name export? [] (atom [])))
+  ([name export? var-list]
+   (->Port 'Port name export? var-list (atom []))))
 
+;; TODO: Token and retrieve-port is incompatible.
 
 (extend-type Port
 
   Accessible
+
+  (project-value
+    [this v-map]
+    (reduce into {}
+                 (map (fn [attr]
+                        {attr (attr v-map)})
+                   (:var-list this))))
 
   (add-value!
     [port value]

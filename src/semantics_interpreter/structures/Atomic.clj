@@ -6,7 +6,15 @@
 (defrecord Atomic
   [type name
    ports places transitions
-   time])
+   time
+   variables])
+;; variable: {:x v-x :y v-y}
+
+(defn current-place
+  [component]
+  (first
+    (filter enable?
+      (:places component))))
 
 (defn current-transitions
   [component]
@@ -15,22 +23,54 @@
       #(= current (:source %))
       (:transitions component))))
 
+(defn- add-port-values
+  [component]
+  (doseq [t (current-transitions component)]
+    (add-value!
+      (:port t)
+      (into
+        (project-value
+          (:port t)
+          (deref (:variables component)))
+        {:time (get-time component)}))))
+(defn- clear-port-values
+  [component]
+  (doseq [t (current-transitions component)]
+    (clear! (:port t))))
+
 (defn create-atomic
-  [name ports places init transitions time]
-  (let [c (->Atomic 'Atomic name
-                            ports
-                            places
-                            transitions
-                            (atom time))]
-    (do
-      (doseq [s (:places c)]
-        (clear! s))
+  ([name ports places init transitions time]
+   (let [c (->Atomic 'Atomic name
+                             ports
+                             places
+                             transitions
+                             (atom time)
+                             (atom {}))]
+     (do
+       (doseq [s (:places c)]
+         (clear! s))
 
-      (enable! init)
+       (enable! init)
 
-      (doseq [t (current-transitions c)]
-        (add-value! (:port t) {:time (get-time c)})))
-    c))
+       (add-port-values c))
+     c))
+  ([name ports places init transitions time variables]
+   (let [c (->Atomic 'Atomic name
+                             ports
+                             places
+                             transitions
+                             (atom time)
+                             (atom variables))]
+     (do
+       (doseq [s (:places c)]
+         (clear! s))
+
+       (enable! init)
+
+       (add-port-values c))
+     c)))
+
+
 
 (defn enabled-internal-transitions
   [component]
@@ -50,11 +90,13 @@
 (defn- fire-transition
   [component t]
   (do
-    (doseq [t (current-transitions component)]
-      (clear! (:port t)))
+    (clear-port-values component)
 
     (clear! (:source t))
-    ;;TODO: some transition stuff
+
+    ;; action stuff
+    ((:action! t) component)
+
     ;;some time stuff
     (set-time
       component
@@ -64,8 +106,7 @@
 
     (enable! (:target t))
 
-    (doseq [t (current-transitions component)]
-      (add-value! (:port t) {:time (get-time component)}))))
+    (add-port-values component)))
 
 (extend-type Atomic
   Queryable
@@ -110,11 +151,16 @@
        new-value))
     ([this port new-value]
      (set-time this new-value)))
-  (current-place
-    [this]
-    (first
-      (filter enable?
-        (:places this))))
+
+  (get-variable
+    [this attr]
+    (attr (deref (:variables this))))
+  (set-variable
+    ([this attr new-value]
+     (swap! (:variables this)
+       assoc
+       attr new-value)))
+
   (retrieve-port
     [this port]
     (if (contain-port? this port)
@@ -128,14 +174,23 @@
   (assign-port!
     [this port token]
     (let [current (current-place this)
+          ;; get the transition to fire.
           t (some
               #(if (enable? % current port) %)
               (:transitions this))]
       (do
-        ;;set component's time"
         (if (nil? (:time token))
           ()
           (set-time this (:time token)))
+
+        (doseq [attr (keys (:value token))]
+          (if (contains?
+                (deref (:variables this))
+                attr)
+            (set-variable
+              this
+              attr
+              (get (:value token) attr))))
 
         (fire-transition this t)))))
 
