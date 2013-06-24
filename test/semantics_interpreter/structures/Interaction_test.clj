@@ -7,6 +7,7 @@
    [semantics-interpreter.structures.Transition :refer :all ]
    [semantics-interpreter.structures.Port :refer :all ]
    [semantics-interpreter.structures.Place :refer :all ]
+   [semantics-interpreter.structures.Token :refer :all ]
    [semantics-interpreter.structures.Interaction :refer :all ]))
 
 
@@ -153,17 +154,24 @@
               {:component C2 :port R1}]
              1
              (fn action!
-               [direction]
+               [I direction]
                (cond
                  (= direction 'up)
-                 {:x1 (:x (first (retrieve-port C1 E1)))
-                  :x2 (:x (first (retrieve-port C2 R1)))}
+                 (create-token
+                   {:x1 (get-variable I 0 :x )
+                    :x2 (get-variable I 1 :x )}
+                   (get-time I))
 
                  (= direction 'down)
-                 (fn [v]
+                 (fn [token]
                    ;; v is result of up-action
-                   {E1 {:x (+ (:x1 v) (:x2 v))}
-                    R1 {:x (+ (:x1 v) (:x2 v))}}))))
+                   (let [v (:value token)]
+                     {E1 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))
+                      R1 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))})))))
         G2 (create-interaction
              "G2"
              PG
@@ -171,58 +179,86 @@
               {:component C2 :port R1}]
              1
              (fn action!
-               [direction]
+               [I direction]
                (cond
                  (= direction 'up)
-                 {:x1 (:x (first (retrieve-port C1 E1)))
-                  :x2 (:x (first (retrieve-port C2 R1)))}
+                 (create-token
+                   {:x1 (get-variable I 0 :x )
+                    :x2 (get-variable I 1 :x )}
+                   (get-time I))
 
                  (= direction 'down)
-                 (fn [v]
+                 (fn [token]
                    ;; v is result of up-action
-                   {E1 {:x (+ (:x1 v) (:x2 v))}
-                    R1 {:x (+ (:x1 v) (:x2 v))}}))))]
+                   (let [v (:value token)]
+                     {E1 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))
+                      R1 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))})))))]
     (testing "all-in-one testing of Interaction with vars."
       (is (enable? C1 E1))
       (is (enable? C2 R1))
       (is (enable? G1))
       (is (enable? G2 PG))
-      (is (= [{:time 0 :x 2}] (retrieve-port C2 R1)))
+      (is (= [{:time 0 :value {:x 2}}] (retrieve-port C2 R1)))
 
       (do
-        (assign-port! C1 E1 {:time 1})
+        (assign-port! C1 E1
+                         (create-token
+                           {}
+                           1))
         (is (= 1 (get-time C1)))
         (is (enable? C1))
+        (set-time C1 0)
         (fire! C1)
         (is (enable? C1))
-        (is (enable? C1 E1))
-        (set-time C1 0))
+        (is (enable? C1 E1)))
 
       (do
-        (assign-port! C2 R1 {:time 2})
+        (assign-port! C2 R1
+                         (create-token
+                           {}
+                           2))
         (is (enable? C2))
-        (fire! C2)
-        (is (enable? C2 R1))
         (is (= 2 (get-time C2)))
-        (set-time C2 0))
+        (set-time C2 0)
+        (fire! C2)
+        (is (enable? C2 R1)))
+
 
       (do
-        (set-time C1 0)
+        (is (= 0 (get-time C1)))
+        (is (= 0 (get-time C2)))
         (is (= 1 (get-variable C1 :x )))
-        (fire! C1) ;; now in state end.
-        (fire! C1) ;; to refresh port time, now in state start.
-        (is (= [{:x 1 :time 0}] (retrieve-port C1 E1)))
+        (is (= 2 (get-variable C2 :x )))
 
-        (is (= ((:action! G1) 'up)
-              {:x1 1 :x2 2}))
-        (is (= (((:action! G1) 'down)
-                {:x1 1 :x2 2})
-              {E1 {:x 3}
-               R1 {:x 3}}))
-        (is (= (get (((:action! G1) 'down)
-                     {:x1 1 :x2 2})
+        (is (= [{:value {:x 1} :time 0}]
+              (retrieve-port C1 E1)))
+        (is (= [{:value {:x 2} :time 0}]
+              (retrieve-port C2 R1)))
+
+        (is (= ((:action! G1) G1 'up)
+              (create-token
+                {:x1 1 :x2 2}
+                0)))
+        (is (= (((:action! G1) G1 'down)
+                (create-token
+                  {:x1 1 :x2 2}
+                  0))
+              {E1 (create-token
+                    {:x 3}
+                    0)
+               R1 (create-token
+                    {:x 3}
+                    0)}))
+        (is (= (get (((:action! G1) G1 'down)
+                     {:value {:x1 1 :x2 2} :time 0})
                  E1)
-              {:x 3}))
+              (create-token
+                {:x 3}
+                0)))
         (fire! G1)
         (is (= 3 (get-variable C1 :x )))
         (is (enable? C1))
@@ -240,12 +276,23 @@
         (fire! C2)
         (is (enable? G1))
         (is (enable? G2 PG))
-        (is (= ((:action! G2) 'up)
-              {:x1 1 :x2 2}))
-        (is (= [{:x1 1 :time 0}] (retrieve-port G2 PG))))
+        (is (= ((:action! G2) G2 'up)
+              (create-token
+                {:x1 1 :x2 2}
+                0)))
+        (is (=
+              [(create-token
+                 {:x1 1}
+                 0)]
+              (retrieve-port G2 PG))))
 
       (do
-        (assign-port! G2 PG {:time 0})
+        (assign-port!
+          G2
+          PG
+          (create-token
+            {}
+            0))
         (is (enable? C1))
         (is (enable? C2))
         (is (= 1 (get-time C1)))

@@ -3,7 +3,7 @@
   (use semantics-interpreter.protocols.Accessible))
 
 (defrecord Port
-  [type name export? var-list values])
+  [type name export? var-list tokens])
 
 (defn create-port
   ([name export?]
@@ -18,25 +18,30 @@
   Accessible
 
   (project-value
-    [this v-map]
-    (reduce into {}
-                 (map (fn [attr]
-                        {attr (attr v-map)})
-                   (:var-list this))))
+    ;; value:  {:x 1 :y 2 :z 3}
+    ;; result: {:x 1 :y 2}
+    [this value]
+    (reduce
+      into
+      {}
+      (map
+        (fn [attr]
+          {attr (attr value)})
+        (:var-list this))))
 
-  (add-value!
-    [port value]
-    (swap! (:values port)
+  (add-token!
+    [port token]
+    (swap! (:tokens port)
       conj
-      value))
+      token))
 
   (retrieve-port
     [this]
-    (deref (:values this)))
+    (deref (:tokens this)))
 
   (clear!
     [this]
-    (compare-and-set! (:values this)
+    (compare-and-set! (:tokens this)
       (retrieve-port this)
       []))
 

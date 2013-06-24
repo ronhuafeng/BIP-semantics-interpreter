@@ -10,34 +10,34 @@
     (is (= true (export? (create-port "P" true))))
     (is (= false (export? (create-port "Q" false))))))
 
-(deftest add-value-test
-  (testing "add-value of Port"
+(deftest add-token!-test
+  (testing "add-token! of Port"
     (is (let [p (create-port "P" false)]
           (do
-            (add-value! p {:x 1})
+            (add-token! p {:x 1})
             (= [{:x 1}]
               (retrieve-port p)))))
     (is (let [p (create-port "P" false)]
           (do
-            (add-value! p {:x 1})
+            (add-token! p {:x 1})
             (= [{:x 1}]
               (retrieve-port p)))))
     (is (let [p (create-port "P" false)]
           (do
-            (add-value! p {:ePort '()})
+            (add-token! p {:ePort '()})
             (= [{:ePort '()}]
               (retrieve-port p)))))
     (is (let [p1 (create-port "P" false)
               p2 (create-port "Q" false)]
           (doseq [p [p1 p2]]
-            (add-value! p 1))
+            (add-token! p 1))
           (= [1] (retrieve-port p1))))))
 
 (deftest retrieve-port-test
   (testing "retrieve-port-test of Port"
     (is (let [p (create-port "P" false)]
           (do
-            (add-value! p {:x 1})
+            (add-token! p {:x 1})
             (= [{:x 1}]
               (retrieve-port p)))))))
 
@@ -45,7 +45,7 @@
   (testing "clear! of Port"
     (is (let [p (create-port "P" false)]
           (do
-            (add-value! p {:x 1})
+            (add-token! p {:x 1})
             (clear! p)
             (= []
               (retrieve-port p)))))))
@@ -61,7 +61,7 @@
   (testing "enable? of Port"
     (is (= true (let [p (create-port "P" false)]
                   (do
-                    (add-value! p {:x 1})
+                    (add-token! p {:x 1})
                     (enable? p)))))
     (is (= false (enable?
                    (create-port "P" false))))))

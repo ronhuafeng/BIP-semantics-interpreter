@@ -8,6 +8,7 @@
    [semantics-interpreter.structures.Interaction :refer :all ]
    [semantics-interpreter.structures.Transition :refer :all ]
    [semantics-interpreter.structures.Port :refer :all ]
+   [semantics-interpreter.structures.Token :refer :all ]
    [semantics-interpreter.structures.Place :refer :all ]))
 
 (deftest all-in-one-test1
@@ -174,17 +175,24 @@
               {:component c2 :port P2}]
              2
              (fn action!
-               [direction]
+               [I direction]
                (cond
                  (= direction 'up)
-                 {:x1 (:x (first (retrieve-port c1 P1)))
-                  :x2 (:x (first (retrieve-port c2 P2)))}
+                 (create-token
+                   {:x1 (get-variable I 0 :x )
+                    :x2 (get-variable I 1 :x )}
+                   (get-time I))
 
                  (= direction 'down)
-                 (fn [v]
+                 (fn [token]
                    ;; v is result of up-action
-                   {P1 {:x (+ (:x1 v) (:x2 v))}
-                    P2 {:x (+ (:x1 v) (:x2 v))}}))))
+                   (let [v (:value token)]
+                     {P1 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))
+                      P2 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))})))))
 
         EC (create-port "EC" true)
         c3 (create-compound
@@ -200,7 +208,7 @@
       (is (not= [] (retrieve-port c3 EC)))
 
       (do
-        (assign-port! c3 EC {:time 2})
+        (assign-port! c3 EC {:value {} :time 2})
         (is (enable? c1))
         (is (enable? c2))
         (is (enable? c3))
@@ -260,17 +268,24 @@
               {:component c2 :port P2}]
              2
              (fn action!
-               [direction]
+               [I direction]
                (cond
                  (= direction 'up)
-                 {:x1 (:x (first (retrieve-port c1 P1)))
-                  :x2 (:x (first (retrieve-port c2 P2)))}
+                 (create-token
+                   {:x1 (get-variable I 0 :x )
+                    :x2 (get-variable I 1 :x )}
+                   (get-time I))
 
                  (= direction 'down)
-                 (fn [v]
+                 (fn [token]
                    ;; v is result of up-action
-                   {P1 {:x (+ (:x1 v) (:x1 v))}
-                    P2 {:x (+ (:x1 v) (:x1 v))}}))))
+                   (let [v (:value token)]
+                     {P1 (create-token
+                           {:x (+ (:x1 v) (:x1 v))}
+                           (:time token))
+                      P2 (create-token
+                           {:x (+ (:x1 v) (:x2 v))}
+                           (:time token))})))))
 
         EC (create-port "EC" true [:x1 ])
         c3 (create-compound
@@ -297,17 +312,25 @@
               {:component c4 :port P4}]
              2
              (fn action!
-               [direction]
+               [I direction]
                (cond
                  (= direction 'up)
-                 {:x1 (:x1 (first (retrieve-port c3 EC)))
-                  :x (:x (first (retrieve-port c4 P4)))}
+                 (create-token
+                   {:x1 (get-variable I 0 :x1 )
+                    :x (get-variable I 1 :x )}
+                   (get-time I))
 
                  (= direction 'down)
-                 (fn [v]
+                 (fn [token]
                    ;; v is result of up-action
-                   {EC {:x1 (- (:x1 v) 1)}
-                    P4 {:x (+ (:x1 v) 1)}}))))]
+                   (let [v (:value token)]
+                     {EC (create-token
+                           {:x1 (- (:x1 v) 1)}
+                           (:time token))
+                      P4 (create-token
+                           {:x (+ (:x1 v) 1)}
+                           (:time token))}))))
+             )]
     (testing "all-in-one test 2 of Compount"
       (do
         (is (not (enable? c1)))
@@ -317,16 +340,26 @@
         (is (enable? c3 EC))
         (is (= (get-export c3 EC)
               {:source EI :source-component I1 :target EC}))
-        (is (= [{:time 0 :x1 2}] (retrieve-port I1 EI)))
-        (is (= [{:time 0 :x1 2}] (retrieve-port c3 EC))))
+        (is (= [{:time 0 :value {:x1 2}}] (retrieve-port I1 EI)))
+        (is (= [{:time 0 :value {:x1 2}}] (retrieve-port c3 EC))))
 
       (do
-        (is (= ((:action! I2) 'up)
-              {:x1 2 :x 1}))
-        (is (= (((:action! I2) 'down) {:x1 2 :x 1})
-              {EC {:x1 1} P4 {:x 3}}))
+        (is (= ((:action! I2) I2 'up)
+              (create-token
+                {:x1 2 :x 1}
+                0)))
+        (is (= (((:action! I2) I2 'down)
+                (create-token
+                  {:x1 2 :x 1}
+                  0))
+              {EC (create-token
+                    {:x1 1}
+                    0)
+               P4 (create-token
+                    {:x 3}
+                    0)}))
         (fire! I2)
 
         (is (= 2 (get-variable c1 :x )))
-        (is (= 2 (get-variable c2 :x )))
+        (is (= 3 (get-variable c2 :x )))
         (is (= 3 (get-variable c4 :x )))))))

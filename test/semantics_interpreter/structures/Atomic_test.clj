@@ -128,7 +128,7 @@
       (do
         (is (not= [] (retrieve-port C1 E1)))
         (is (= [] (retrieve-port I2)))
-        (is (= [{:x 1 :time 0}] (retrieve-port E1)))
+        (is (= [{:value {:x 1} :time 0}] (retrieve-port E1)))
         (is (= [] (retrieve-port C1 E2))))
       (do
         (is (= 1 (get-variable C1 :x )))

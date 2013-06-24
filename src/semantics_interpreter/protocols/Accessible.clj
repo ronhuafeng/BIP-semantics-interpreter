@@ -6,8 +6,8 @@
     [this port])
   (assign-port!
     [this port token])
-  (add-value!
-    [this value])
+  (add-token!
+    [this token])
   (clear!
     [this])
   (enable!
@@ -23,7 +23,8 @@
 
   (get-variable
     [this attr]
-    [this port attr])
+    [this port attr] ;; or this index attr
+    )
   (set-variable
     [this attr new-value]
     [this port attr new-value])

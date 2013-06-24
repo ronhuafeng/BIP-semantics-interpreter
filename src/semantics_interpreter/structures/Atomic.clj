@@ -1,7 +1,8 @@
 (ns semantics-interpreter.structures.Atomic
   (use semantics-interpreter.protocols.Queryable)
   (use semantics-interpreter.protocols.Accessible)
-  (use semantics-interpreter.protocols.Fireable))
+  (use semantics-interpreter.protocols.Fireable)
+  (use semantics-interpreter.structures.Token))
 
 (defrecord Atomic
   [type name
@@ -23,17 +24,17 @@
       #(= current (:source %))
       (:transitions component))))
 
-(defn- add-port-values
+(defn- add-port-tokens
   [component]
   (doseq [t (current-transitions component)]
-    (add-value!
+    (add-token!
       (:port t)
-      (into
+      (create-token
         (project-value
           (:port t)
           (deref (:variables component)))
-        {:time (get-time component)}))))
-(defn- clear-port-values
+        (get-time component)))))
+(defn- clear-port-tokens
   [component]
   (doseq [t (current-transitions component)]
     (clear! (:port t))))
@@ -52,7 +53,7 @@
 
        (enable! init)
 
-       (add-port-values c))
+       (add-port-tokens c))
      c))
   ([name ports places init transitions time variables]
    (let [c (->Atomic 'Atomic name
@@ -67,7 +68,7 @@
 
        (enable! init)
 
-       (add-port-values c))
+       (add-port-tokens c))
      c)))
 
 
@@ -90,7 +91,7 @@
 (defn- fire-transition
   [component t]
   (do
-    (clear-port-values component)
+    (clear-port-tokens component)
 
     (clear! (:source t))
 
@@ -106,7 +107,7 @@
 
     (enable! (:target t))
 
-    (add-port-values component)))
+    (add-port-tokens component)))
 
 (extend-type Atomic
   Queryable
@@ -153,8 +154,10 @@
      (set-time this new-value)))
 
   (get-variable
-    [this attr]
-    (attr (deref (:variables this))))
+    ([this attr]
+     (attr (deref (:variables this))))
+    ([this port attr]
+     (attr (deref (:variables this)))))
   (set-variable
     ([this attr new-value]
      (swap! (:variables this)

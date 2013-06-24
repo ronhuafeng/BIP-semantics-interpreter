@@ -46,6 +46,11 @@
 
   Accessible
 
+  (get-variable
+    [this port attr]
+    (let [token (first (retrieve-port this port))]
+      (get (:value token) attr)))
+
   (assign-port!
     [this port token]
     (let [export (get-export this port)]
